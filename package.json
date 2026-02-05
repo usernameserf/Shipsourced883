@@ -1,0 +1,1438 @@
+{% doc %}
+  @prompt
+    ROLE
+    
+    You are a senior Shopify + UX engineer building a mobile-first smart quote generator for a 3PL fulfillment company called ShipSourced.
+    
+    This tool must be:
+    
+    Extremely clean
+    
+    Fast (<30 seconds to quote)
+    
+    Mobile-optimized
+    
+    Accurate
+    
+    Locked after payment
+    
+    Do NOT include Amazon FBA, pallets, cartons, or prep.
+    This is E-commerce fulfillment ONLY.
+    
+    CORE GOAL
+    
+    Build a mobile-optimized step-by-step quote generator that:
+    
+    Calculates Shipping (US Average) from a provided rate table
+    
+    Calculates Pick & Pack labor
+    
+    Adds flat storage
+    
+    Applies automatic volume discounts
+    
+    Shows a clear quote
+    
+    Allows users to lock the quote by paying a $150 one-time onboarding fee
+    
+    Saves and tracks every submission and payment
+    
+    MOBILE-FIRST REQUIREMENTS (CRITICAL)
+    
+    Fully mobile responsive
+    
+    One question per screen
+    
+    Thumb-friendly UI
+    
+    Large buttons, minimal typing
+    
+    Progress indicator (Step 1 of 5)
+    
+    Quote visible in under 30 seconds
+    
+    Sticky bottom CTA button (always visible on mobile):
+    
+    Sticky CTA Text
+    
+    “Lock in This Quote”
+    
+    Design Style
+    
+    Tesla-style
+    
+    Clean white space
+    
+    Big numbers
+    
+    Simple wording
+    
+    Card-based layout
+    
+    No clutter
+    
+    STEP-BY-STEP FLOW
+    STEP 1 — Order Type
+    
+    Single option only:
+    
+    E-commerce Fulfillment
+    
+    STEP 2 — Product Details
+    
+    Weight
+    
+    Toggle:
+    
+    OZ (1–15.999 oz)
+    
+    LB (1–10 lb)
+    
+    Slider or dropdown (no free text)
+    
+    Units per Order
+    
+    Single unit
+    
+    Multi-unit
+    
+    Quick buttons: 2 / 3 / 4 / 5+
+    
+    Or numeric input
+    
+    STEP 3 — Destination (SIMPLIFIED)
+    
+    Destination is always United States
+    
+    No state selector
+    
+    No zone selector
+    
+    Shipping Calculation Logic
+    
+    Use a US-Average Shipping Rate Table:
+    
+    Detect OZ vs LB
+    
+    Match correct weight break
+    
+    Calculate average across:
+    
+    Zone 1&2
+    
+    Zone 3
+    
+    Zone 4
+    
+    Zone 5
+    
+    Zone 6
+    
+    Zone 7
+    
+    Zone 8
+    
+    Exclude Zone 11/12/13 by default (remote states)
+    
+    If weight exceeds supported range:
+    
+    Stop calculation
+    
+    Show “Request Custom Quote”
+    
+    Shipping Output Label (REQUIRED)
+    
+    Shipping (US Average)
+    Average across US zones for simple, predictable pricing.
+    
+    STEP 4 — Packaging Type
+    
+    User selects one:
+    
+    Poly bag
+    
+    Bubble poly bag
+    
+    Small box (10×8×6)
+    
+    Medium box (18×12×10)
+    
+    Oversized box
+    
+    Custom packaging
+    
+    STEP 5 — Monthly Volume
+    
+    Selectable bands:
+    
+    0–499
+    
+    500–1,999
+    
+    2,000–4,999
+    
+    5,000–9,999
+    
+    10,000–24,999
+    
+    25,000+
+    
+    Used for discounts + monthly estimate.
+    
+    PRICING LOGIC (AUTOMATED)
+    SHIPPING
+    
+    Pulled from US-Average rate table
+    Never discounted.
+    
+    PICK & PACK LABOR
+    
+    Base labor per order:
+    
+    Poly bag → $1.50
+    
+    Bubble poly bag → $1.95
+    
+    Small box → $2.50
+    
+    Medium box → $3.50
+    
+    Oversized box → $4.50
+    
+    Extra units:
+    
+    Bags → +$0.50 per extra unit
+    
+    Boxes → +$1.00 per extra unit
+    
+    STORAGE
+    
+    Flat $25/month
+    
+    Always included
+    
+    Never discounted
+    
+    AUTO DISCOUNTS (LABOR ONLY)
+    
+    0–499 → No discount
+    
+    500–1,999 → 7% off labor
+    
+    2,000–4,999 → 12% off labor
+    
+    5,000–9,999 → 18% off labor
+    
+    10,000–24,999 → 25% off labor
+    
+    25,000+ → Show Request Custom Quote
+    
+    QUOTE OUTPUT (MOBILE CARD)
+    
+    Show line items:
+    
+    Shipping (US Average)
+    
+    Pick & Pack Labor
+    
+    Storage: $25/month
+    
+    Discount applied (ex: “12% off labor”)
+    
+    Total per order
+    
+    Estimated monthly total
+    
+    Monthly Estimate Formula
+    
+    Use midpoint of volume band:
+    
+    monthlyTotal = (totalPerOrder × estimatedMonthlyOrders) + 25
+    
+    
+    Rules:
+    
+    No hidden fees
+    
+    Large total number
+    
+    Simple wording
+    
+    LOCK QUOTE + PAYMENT
+    Sticky CTA
+    
+    “Lock in This Quote”
+    
+    On Click → Onboarding Flow
+    
+    Account creation fields
+    
+    Email
+    
+    Phone Number
+    
+    Company name
+    
+    Platform:
+    
+    Shopify
+    
+    Amazon
+    
+    Walmart
+    
+    TikTok
+    
+    Confirm monthly volume
+    
+    Payment
+    
+    $150 one-time onboarding fee
+    
+    Shopify Checkout or Stripe
+    
+    After Payment
+    
+    Save quote inputs + outputs
+    
+    Timestamp quote
+    
+    Tag customer:
+    Quoted – Onboarded
+    
+    Prevent price changes unless re-quoted
+    
+    Confirmation Screen
+    
+    “Your quote is locked. Our team will reach out to complete setup.”
+    
+    EDGE CASES
+    
+    If user selects:
+    
+    Oversized
+    
+    Custom packaging
+    
+    Special handling
+    
+    Weight outside supported range
+    
+    Then:
+    
+    Disable pricing
+    
+    Show Request Custom Quote
+    
+    Open contact form
+    
+    FINAL DISCLAIMER (REQUIRED)
+    
+    “This quote is an estimate. Final pricing is confirmed after inventory inspection.”
+    
+    📊 SUBMISSION TRACKING (VERY IMPORTANT)
+    REQUIRED TRACKING EVENTS
+    
+    Track these events internally:
+    
+    quote_started
+    
+    quote_generated
+    
+    lock_quote_clicked
+    
+    onboarding_started
+    
+    onboarding_paid
+    
+    quote_locked
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-quote-generator-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: {{ block.settings.background_color }};
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  .ai-quote-step-{{ ai_gen_id }} {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-quote-step-{{ ai_gen_id }}.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .ai-quote-progress-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.6;
+  }
+
+  .ai-quote-card-{{ ai_gen_id }} {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-quote-heading-{{ ai_gen_id }} {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: {{ block.settings.heading_color }};
+    line-height: 1.2;
+  }
+
+  .ai-quote-subheading-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 32px;
+    opacity: 0.7;
+    line-height: 1.5;
+  }
+
+  .ai-quote-option-{{ ai_gen_id }} {
+    background: #f8f8f8;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    text-align: left;
+  }
+
+  .ai-quote-option-{{ ai_gen_id }}:hover {
+    border-color: {{ block.settings.primary_color }};
+    background: #ffffff;
+  }
+
+  .ai-quote-option-{{ ai_gen_id }}.selected {
+    border-color: {{ block.settings.primary_color }};
+    background: {{ block.settings.primary_color }};
+    color: #ffffff;
+  }
+
+  .ai-quote-weight-toggle-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ai-quote-toggle-btn-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 12px;
+    background: #f8f8f8;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .ai-quote-toggle-btn-{{ ai_gen_id }}.active {
+    background: {{ block.settings.primary_color }};
+    border-color: {{ block.settings.primary_color }};
+    color: #ffffff;
+  }
+
+  .ai-quote-slider-{{ ai_gen_id }} {
+    margin: 24px 0;
+  }
+
+  .ai-quote-slider-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .ai-quote-slider-value-{{ ai_gen_id }} {
+    font-size: 32px;
+    font-weight: 600;
+    color: {{ block.settings.heading_color }};
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .ai-quote-slider-input-{{ ai_gen_id }} {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .ai-quote-slider-input-{{ ai_gen_id }}::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: {{ block.settings.primary_color }};
+    cursor: pointer;
+  }
+
+  .ai-quote-slider-input-{{ ai_gen_id }}::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: {{ block.settings.primary_color }};
+    cursor: pointer;
+    border: none;
+  }
+
+  .ai-quote-units-{{ ai_gen_id }} {
+    margin: 24px 0;
+  }
+
+  .ai-quote-quick-buttons-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .ai-quote-quick-btn-{{ ai_gen_id }} {
+    padding: 12px;
+    background: #f8f8f8;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .ai-quote-quick-btn-{{ ai_gen_id }}.active {
+    background: {{ block.settings.primary_color }};
+    border-color: {{ block.settings.primary_color }};
+    color: #ffffff;
+  }
+
+  .ai-quote-summary-{{ ai_gen_id }} {
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 32px;
+  }
+
+  .ai-quote-summary-row-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-quote-summary-row-{{ ai_gen_id }}.total {
+    font-size: 24px;
+    font-weight: 600;
+    color: {{ block.settings.heading_color }};
+    padding-top: 12px;
+    border-top: 2px solid #e0e0e0;
+    margin-top: 12px;
+  }
+
+  .ai-quote-discount-{{ ai_gen_id }} {
+    color: #10b981;
+    font-weight: 500;
+  }
+
+  .ai-quote-monthly-{{ ai_gen_id }} {
+    text-align: center;
+    margin-top: 24px;
+    padding: 20px;
+    background: {{ block.settings.primary_color }};
+    color: #ffffff;
+    border-radius: 8px;
+  }
+
+  .ai-quote-monthly-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+
+  .ai-quote-monthly-value-{{ ai_gen_id }} {
+    font-size: 36px;
+    font-weight: 600;
+  }
+
+  .ai-quote-sticky-cta-{{ ai_gen_id }} {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 16px 20px;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+
+  .ai-quote-cta-btn-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 18px;
+    background: {{ block.settings.primary_color }};
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-quote-cta-btn-{{ ai_gen_id }}:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .ai-quote-cta-btn-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ai-quote-nav-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 24px;
+  }
+
+  .ai-quote-nav-btn-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 16px;
+    background: {{ block.settings.primary_color }};
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-quote-nav-btn-{{ ai_gen_id }}.secondary {
+    background: #f8f8f8;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-quote-nav-btn-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ai-quote-disclaimer-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: 12px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.6;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  .ai-quote-custom-request-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .ai-quote-custom-heading-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: {{ block.settings.heading_color }};
+  }
+
+  .ai-quote-custom-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 24px;
+    opacity: 0.7;
+  }
+
+  .ai-quote-input-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .ai-quote-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.primary_color }};
+  }
+
+  .ai-quote-select-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    background: #ffffff;
+  }
+
+  .ai-quote-onboarding-{{ ai_gen_id }} {
+    padding: 24px;
+  }
+
+  .ai-quote-confirmation-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .ai-quote-confirmation-icon-{{ ai_gen_id }} {
+    width: 80px;
+    height: 80px;
+    background: #10b981;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #ffffff;
+  }
+
+  @media (max-width: 749px) {
+    .ai-quote-generator-{{ ai_gen_id }} {
+      padding: 16px;
+    }
+
+    .ai-quote-card-{{ ai_gen_id }} {
+      padding: 32px 20px;
+      min-height: 350px;
+    }
+
+    .ai-quote-heading-{{ ai_gen_id }} {
+      font-size: 24px;
+    }
+
+    .ai-quote-sticky-cta-{{ ai_gen_id }} {
+      padding: 12px 16px;
+    }
+  }
+{% endstyle %}
+
+<quote-generator-{{ ai_gen_id }} class="ai-quote-generator-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-quote-progress-{{ ai_gen_id }}">
+    <span class="ai-quote-progress-text-{{ ai_gen_id }}">Step 1 of 5</span>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }} active" data-step="1">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Select Order Type</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Choose your fulfillment service</p>
+      
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-value="ecommerce">
+        E-commerce Fulfillment
+      </div>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="next">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="2">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Product Details</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Tell us about your product</p>
+      
+      <div class="ai-quote-weight-toggle-{{ ai_gen_id }}">
+        <button class="ai-quote-toggle-btn-{{ ai_gen_id }} active" data-unit="oz">OZ</button>
+        <button class="ai-quote-toggle-btn-{{ ai_gen_id }}" data-unit="lb">LB</button>
+      </div>
+
+      <div class="ai-quote-slider-{{ ai_gen_id }}">
+        <div class="ai-quote-slider-value-{{ ai_gen_id }}">
+          <span class="ai-quote-weight-display-{{ ai_gen_id }}">8</span>
+          <span class="ai-quote-weight-unit-{{ ai_gen_id }}">oz</span>
+        </div>
+        <input 
+          type="range" 
+          class="ai-quote-slider-input-{{ ai_gen_id }}" 
+          min="1" 
+          max="15.9" 
+          step="0.1" 
+          value="8"
+          data-slider="weight"
+        >
+      </div>
+
+      <div class="ai-quote-units-{{ ai_gen_id }}">
+        <label class="ai-quote-slider-label-{{ ai_gen_id }}">Units per Order</label>
+        <div class="ai-quote-quick-buttons-{{ ai_gen_id }}">
+          <button class="ai-quote-quick-btn-{{ ai_gen_id }} active" data-units="1">1</button>
+          <button class="ai-quote-quick-btn-{{ ai_gen_id }}" data-units="2">2</button>
+          <button class="ai-quote-quick-btn-{{ ai_gen_id }}" data-units="3">3</button>
+          <button class="ai-quote-quick-btn-{{ ai_gen_id }}" data-units="4">4</button>
+        </div>
+      </div>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }} secondary" data-action="back">Back</button>
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="next">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="3">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Destination</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Shipping to United States</p>
+      
+      <div class="ai-quote-option-{{ ai_gen_id }} selected">
+        United States (Average Rate)
+      </div>
+
+      <p class="ai-quote-disclaimer-{{ ai_gen_id }}">
+        Average across US zones for simple, predictable pricing.
+      </p>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }} secondary" data-action="back">Back</button>
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="next">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="4">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Packaging Type</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Select your packaging</p>
+      
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="poly_bag" data-cost="1.50">Poly bag</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="bubble_poly" data-cost="1.95">Bubble poly bag</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="small_box" data-cost="2.50">Small box (10×8×6)</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="medium_box" data-cost="3.50">Medium box (18×12×10)</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="oversized" data-cost="4.50">Oversized box</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-packaging="custom" data-cost="0">Custom packaging</div>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }} secondary" data-action="back">Back</button>
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="next">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="5">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Monthly Volume</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Estimated orders per month</p>
+      
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="0-499" data-discount="0">0–499</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="500-1999" data-discount="7">500–1,999</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="2000-4999" data-discount="12">2,000–4,999</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="5000-9999" data-discount="18">5,000–9,999</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="10000-24999" data-discount="25">10,000–24,999</div>
+      <div class="ai-quote-option-{{ ai_gen_id }}" data-volume="25000+" data-discount="0">25,000+</div>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }} secondary" data-action="back">Back</button>
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="calculate">Calculate Quote</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="6">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Your Quote</h2>
+      
+      <div class="ai-quote-summary-{{ ai_gen_id }}">
+        <div class="ai-quote-summary-row-{{ ai_gen_id }}">
+          <span>Shipping (US Average)</span>
+          <span class="ai-quote-shipping-cost-{{ ai_gen_id }}">$0.00</span>
+        </div>
+        <div class="ai-quote-summary-row-{{ ai_gen_id }}">
+          <span>Pick & Pack Labor</span>
+          <span class="ai-quote-labor-cost-{{ ai_gen_id }}">$0.00</span>
+        </div>
+        <div class="ai-quote-summary-row-{{ ai_gen_id }}">
+          <span>Storage</span>
+          <span>$25.00/mo</span>
+        </div>
+        <div class="ai-quote-summary-row-{{ ai_gen_id }} ai-quote-discount-row-{{ ai_gen_id }}" style="display: none;">
+          <span class="ai-quote-discount-{{ ai_gen_id }}">Discount Applied</span>
+          <span class="ai-quote-discount-{{ ai_gen_id }} ai-quote-discount-amount-{{ ai_gen_id }}">-$0.00</span>
+        </div>
+        <div class="ai-quote-summary-row-{{ ai_gen_id }} total">
+          <span>Total per Order</span>
+          <span class="ai-quote-total-cost-{{ ai_gen_id }}">$0.00</span>
+        </div>
+      </div>
+
+
+      <p class="ai-quote-disclaimer-{{ ai_gen_id }}">
+        This quote is an estimate. Final pricing is confirmed after inventory inspection.
+      </p>
+
+      <div class="ai-quote-nav-{{ ai_gen_id }}">
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }} secondary" data-action="back">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="custom">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <div class="ai-quote-custom-request-{{ ai_gen_id }}">
+        <h2 class="ai-quote-custom-heading-{{ ai_gen_id }}">Request Custom Quote</h2>
+        <p class="ai-quote-custom-text-{{ ai_gen_id }}">
+          Your requirements need a custom quote. Please provide your details and our team will reach out.
+        </p>
+        
+        <input type="email" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Email" required>
+        <input type="text" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Company Name" required>
+        <input type="tel" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Phone Number" required>
+        
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="submit-custom">Submit Request</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="onboarding">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <h2 class="ai-quote-heading-{{ ai_gen_id }}">Lock Your Quote</h2>
+      <p class="ai-quote-subheading-{{ ai_gen_id }}">Complete onboarding to secure this pricing</p>
+      
+      <div class="ai-quote-onboarding-{{ ai_gen_id }}">
+        <input type="email" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Email" required>
+        <input type="tel" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Phone Number" required>
+        <input type="text" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Company Name" required>
+        
+        <select class="ai-quote-select-{{ ai_gen_id }}" required>
+          <option value="">Select Platform</option>
+          <option value="shopify">Shopify</option>
+          <option value="amazon">Amazon</option>
+          <option value="walmart">Walmart</option>
+          <option value="tiktok">TikTok</option>
+        </select>
+
+        <div class="ai-quote-summary-{{ ai_gen_id }}" style="margin-top: 24px;">
+          <div class="ai-quote-summary-row-{{ ai_gen_id }}">
+            <span>One-time Onboarding Fee</span>
+            <span>$150.00</span>
+          </div>
+        </div>
+
+        <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="pay" style="margin-top: 24px;">
+          Pay $150 & Lock Quote
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-step-{{ ai_gen_id }}" data-step="confirmation">
+    <div class="ai-quote-card-{{ ai_gen_id }}">
+      <div class="ai-quote-confirmation-{{ ai_gen_id }}">
+        <div class="ai-quote-confirmation-icon-{{ ai_gen_id }}">✓</div>
+        <h2 class="ai-quote-custom-heading-{{ ai_gen_id }}">Quote Locked!</h2>
+        <p class="ai-quote-custom-text-{{ ai_gen_id }}">
+          Your quote is locked. Our team will reach out to complete setup.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-quote-sticky-cta-{{ ai_gen_id }}" style="display: none;">
+    <button class="ai-quote-cta-btn-{{ ai_gen_id }}" disabled>
+      Lock in This Quote
+    </button>
+  </div>
+</quote-generator-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class QuoteGenerator{{ ai_gen_id }} extends HTMLElement {
+constructor() {
+  super();
+
+  // 🔗 Google Sheets Webhook
+  this.webhookUrl = 'https://script.google.com/macros/s/AKfycbwNm8Y2YQ_XHSNTiSQ65VQIiyFNmnNb9hO0tNR3qrxRpQxTQCz3AHnxcSiB1F0ZSwnD/exec';
+
+  this.currentStep = 1;
+  this.quoteData = {
+    orderType: 'ecommerce',
+    weightUnit: 'oz',
+    weight: 8,
+    units: 1,
+    packaging: null,
+    packagingCost: 0,
+    volume: null,
+    discount: 0,
+    shippingCost: 0,
+    laborCost: 0,
+    totalPerOrder: 0
+  };
+
+      
+      this.shippingRates = {
+        oz: [
+          { max: 4, rate: 3.50 },
+          { max: 8, rate: 4.20 },
+          { max: 12, rate: 4.80 },
+          { max: 15.999, rate: 5.40 }
+        ],
+        lb: [
+          { max: 1, rate: 5.80 },
+          { max: 2, rate: 6.50 },
+          { max: 3, rate: 7.20 },
+          { max: 5, rate: 8.50 },
+          { max: 10, rate: 11.00 }
+        ]
+      };
+    }
+
+    connectedCallback() {
+      this.setupEventListeners();
+      this.updateProgress();
+    }
+
+    setupEventListeners() {
+      this.querySelectorAll('[data-action="next"]').forEach(btn => {
+        btn.addEventListener('click', () => this.nextStep());
+      });
+
+      this.querySelectorAll('[data-action="back"]').forEach(btn => {
+        btn.addEventListener('click', () => this.previousStep());
+      });
+
+      this.querySelectorAll('[data-action="calculate"]').forEach(btn => {
+        btn.addEventListener('click', () => this.calculateQuote());
+      });
+
+      this.querySelectorAll('.ai-quote-option-{{ ai_gen_id }}').forEach(option => {
+        option.addEventListener('click', (e) => this.selectOption(e));
+      });
+
+      this.querySelectorAll('.ai-quote-toggle-btn-{{ ai_gen_id }}').forEach(btn => {
+        btn.addEventListener('click', (e) => this.toggleWeightUnit(e));
+      });
+
+      this.querySelectorAll('.ai-quote-quick-btn-{{ ai_gen_id }}').forEach(btn => {
+        btn.addEventListener('click', (e) => this.selectUnits(e));
+      });
+
+      const weightSlider = this.querySelector('[data-slider="weight"]');
+      if (weightSlider) {
+        weightSlider.addEventListener('input', (e) => this.updateWeight(e));
+      }
+
+      const ctaBtn = this.querySelector('.ai-quote-cta-btn-{{ ai_gen_id }}');
+      if (ctaBtn) {
+        ctaBtn.addEventListener('click', () => this.lockQuote());
+      }
+
+      this.querySelectorAll('[data-action="pay"]').forEach(btn => {
+        btn.addEventListener('click', (e) => this.processPayment(e));
+
+      });
+
+      this.querySelectorAll('[data-action="submit-custom"]').forEach(btn => {
+        btn.addEventListener('click', () => this.submitCustomRequest());
+      });
+    }
+
+    selectOption(e) {
+      const option = e.currentTarget;
+      const step = this.currentStep;
+      
+      this.querySelectorAll(`[data-step="${step}"] .ai-quote-option-{{ ai_gen_id }}`).forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      option.classList.add('selected');
+
+      if (option.dataset.packaging) {
+        this.quoteData.packaging = option.dataset.packaging;
+        this.quoteData.packagingCost = parseFloat(option.dataset.cost);
+        
+        if (option.dataset.packaging === 'oversized' || option.dataset.packaging === 'custom') {
+          this.showCustomRequest();
+          return;
+        }
+      }
+
+      if (option.dataset.volume) {
+        this.quoteData.volume = option.dataset.volume;
+        this.quoteData.discount = parseInt(option.dataset.discount);
+        
+        if (option.dataset.volume === '25000+') {
+          this.showCustomRequest();
+          return;
+        }
+      }
+    }
+
+    toggleWeightUnit(e) {
+      const btn = e.currentTarget;
+      const unit = btn.dataset.unit;
+      
+      this.querySelectorAll('.ai-quote-toggle-btn-{{ ai_gen_id }}').forEach(b => {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      
+      this.quoteData.weightUnit = unit;
+      
+      const slider = this.querySelector('[data-slider="weight"]');
+      if (unit === 'oz') {
+        slider.min = 1;
+        slider.max = 15.9;
+        slider.step = 0.1;
+        slider.value = 8;
+        this.quoteData.weight = 8;
+      } else {
+        slider.min = 1;
+        slider.max = 10;
+        slider.step = 0.1;
+        slider.value = 2;
+        this.quoteData.weight = 2;
+      }
+      
+      this.updateWeightDisplay();
+    }
+
+    updateWeight(e) {
+      this.quoteData.weight = parseFloat(e.target.value);
+      this.updateWeightDisplay();
+    }
+
+    updateWeightDisplay() {
+      const display = this.querySelector('.ai-quote-weight-display-{{ ai_gen_id }}');
+      const unitDisplay = this.querySelector('.ai-quote-weight-unit-{{ ai_gen_id }}');
+      if (display) {
+        display.textContent = this.quoteData.weight.toFixed(1);
+      }
+      if (unitDisplay) {
+        unitDisplay.textContent = this.quoteData.weightUnit;
+      }
+    }
+
+    selectUnits(e) {
+      const btn = e.currentTarget;
+      const units = parseInt(btn.dataset.units);
+      
+      this.querySelectorAll('.ai-quote-quick-btn-{{ ai_gen_id }}').forEach(b => {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      
+      this.quoteData.units = units;
+    }
+
+    calculateShipping() {
+      const rates = this.shippingRates[this.quoteData.weightUnit];
+      const weight = this.quoteData.weight;
+      
+      for (let i = 0; i < rates.length; i++) {
+        if (weight <= rates[i].max) {
+          return rates[i].rate;
+        }
+      }
+      
+      return 0;
+    }
+
+    calculateLabor() {
+      let baseCost = this.quoteData.packagingCost;
+      const extraUnits = this.quoteData.units - 1;
+      
+      if (extraUnits > 0) {
+        const isBag = this.quoteData.packaging.includes('bag');
+        const extraCost = isBag ? 0.50 : 1.00;
+        baseCost += extraUnits * extraCost;
+      }
+      
+      return baseCost;
+    }
+
+    calculateQuote() {
+      this.quoteData.shippingCost = this.calculateShipping();
+      const laborBeforeDiscount = this.calculateLabor();
+      const discountAmount = laborBeforeDiscount * (this.quoteData.discount / 100);
+      this.quoteData.laborCost = laborBeforeDiscount - discountAmount;
+      
+      this.quoteData.totalPerOrder = this.quoteData.shippingCost + this.quoteData.laborCost;
+      
+      const volumeMidpoints = {
+        '0-499': 250,
+        '500-1999': 1250,
+        '2000-4999': 3500,
+        '5000-9999': 7500,
+        '10000-24999': 17500
+      };
+      
+      const estimatedOrders = volumeMidpoints[this.quoteData.volume] || 250;
+      this.quoteData.monthlyTotal = (this.quoteData.totalPerOrder * estimatedOrders) + 25;
+      
+      this.displayQuote();
+      this.nextStep();
+      this.showStickyCTA();
+    }
+
+    displayQuote() {
+      const shippingEl = this.querySelector('.ai-quote-shipping-cost-{{ ai_gen_id }}');
+      const laborEl = this.querySelector('.ai-quote-labor-cost-{{ ai_gen_id }}');
+      const totalEl = this.querySelector('.ai-quote-total-cost-{{ ai_gen_id }}');
+      const monthlyEl = this.querySelector('.ai-quote-monthly-value-{{ ai_gen_id }}');
+      const discountRow = this.querySelector('.ai-quote-discount-row-{{ ai_gen_id }}');
+      const discountAmount = this.querySelector('.ai-quote-discount-amount-{{ ai_gen_id }}');
+      
+      if (shippingEl) shippingEl.textContent = '$' + this.quoteData.shippingCost.toFixed(2);
+      if (laborEl) laborEl.textContent = '$' + this.quoteData.laborCost.toFixed(2);
+      if (totalEl) totalEl.textContent = '$' + this.quoteData.totalPerOrder.toFixed(2);
+      if (monthlyEl) monthlyEl.textContent = '$' + Math.round(this.quoteData.monthlyTotal).toLocaleString();
+      
+      if (this.quoteData.discount > 0 && discountRow) {
+        const laborBeforeDiscount = this.calculateLabor();
+        const discount = laborBeforeDiscount * (this.quoteData.discount / 100);
+        discountRow.style.display = 'flex';
+        if (discountAmount) {
+          discountAmount.textContent = '-$' + discount.toFixed(2) + ' (' + this.quoteData.discount + '% off labor)';
+        }
+      }
+    }
+
+    showStickyCTA() {
+      const cta = this.querySelector('.ai-quote-sticky-cta-{{ ai_gen_id }}');
+      const btn = this.querySelector('.ai-quote-cta-btn-{{ ai_gen_id }}');
+      if (cta && btn) {
+        cta.style.display = 'block';
+        btn.disabled = false;
+      }
+    }
+
+ lockQuote() {
+    const onboardingStep = this.querySelector('[data-step="onboarding"]');
+    const email =
+  onboardingStep?.querySelector('input[type="email"]')?.value || '';
+  const company =
+  onboardingStep?.querySelector('input[placeholder="Company Name"]')?.value || '';
+  const payload = {
+    email: email,
+    company: company,
+    orderType: this.quoteData.orderType,
+    weightUnit: this.quoteData.weightUnit,
+    weight: this.quoteData.weight,
+    units: this.quoteData.units,
+    packaging: this.quoteData.packaging,
+    shipping_us_average: this.quoteData.shippingCost,
+    pick_pack_labor: this.quoteData.laborCost,
+    discount_percent: this.quoteData.discount,
+    discount_amount: this.calculateLabor() * (this.quoteData.discount / 100),
+    total_per_order: this.quoteData.totalPerOrder,
+    storage_fee: 25,
+    volume_band: this.quoteData.volume,
+    status: 'quote_locked'
+  };
+
+  fetch(this.webhookUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  // Move forward AFTER logging
+  this.goToStep('onboarding');
+  this.hideStickyCTA();
+}
+
+
+    hideStickyCTA() {
+      const cta = this.querySelector('.ai-quote-sticky-cta-{{ ai_gen_id }}');
+      if (cta) {
+        cta.style.display = 'none';
+      }
+    }
+
+processPayment(event) {
+  if (event) event.preventDefault();
+
+  // ✅ 1) Read onboarding inputs (this is where identity exists)
+  const onboardingStep = this.querySelector('[data-step="onboarding"]');
+
+  const email =
+    onboardingStep.querySelector('input[type="email"]')?.value || '';
+
+  const phone_number =
+    onboardingStep.querySelector('input[type="tel"]')?.value || '';
+
+  const company =
+    onboardingStep.querySelector('input[placeholder="Company Name"]')?.value || '';
+
+  const platform_selected =
+    onboardingStep.querySelector('select')?.value || '';
+
+  // ✅ 2) Send identity data to Google Sheets
+  fetch(this.webhookUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email,
+      phone_number,
+      company,
+      platform_selected,
+
+      status: 'onboarding_started',
+      source: 'quote_tool',
+
+      onboarding_paid: false,
+      onboarding_fee: 150
+    })
+  });
+
+  // ✅ 3) KEEP YOUR EXISTING SHOPIFY CHECKOUT LOGIC (unchanged)
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/cart/add';
+
+  const idInput = document.createElement('input');
+  idInput.type = 'hidden';
+  idInput.name = 'id';
+  idInput.value = '43052811026475';
+
+  const qtyInput = document.createElement('input');
+  qtyInput.type = 'hidden';
+  qtyInput.name = 'quantity';
+  qtyInput.value = '1';
+
+  const checkoutInput = document.createElement('input');
+  checkoutInput.type = 'hidden';
+  checkoutInput.name = 'checkout';
+  checkoutInput.value = 'true';
+
+  form.appendChild(idInput);
+  form.appendChild(qtyInput);
+  form.appendChild(checkoutInput);
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
+
+
+
+    submitCustomRequest() {
+      this.goToStep('confirmation');
+    }
+
+    showCustomRequest() {
+      this.goToStep('custom');
+    }
+
+    nextStep() {
+      if (this.currentStep < 6) {
+        this.currentStep++;
+        this.updateSteps();
+        this.updateProgress();
+      }
+    }
+
+    previousStep() {
+      if (this.currentStep > 1) {
+        this.currentStep--;
+        this.updateSteps();
+        this.updateProgress();
+      }
+    }
+
+    goToStep(step) {
+      this.querySelectorAll('.ai-quote-step-{{ ai_gen_id }}').forEach(s => {
+        s.classList.remove('active');
+      });
+      
+      const targetStep = this.querySelector(`[data-step="${step}"]`);
+      if (targetStep) {
+        targetStep.classList.add('active');
+      }
+    }
+
+    updateSteps() {
+      this.querySelectorAll('.ai-quote-step-{{ ai_gen_id }}').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      const currentStepEl = this.querySelector(`[data-step="${this.currentStep}"]`);
+      if (currentStepEl) {
+        currentStepEl.classList.add('active');
+      }
+    }
+
+    updateProgress() {
+      const progressText = this.querySelector('.ai-quote-progress-text-{{ ai_gen_id }}');
+      if (progressText && this.currentStep <= 5) {
+        progressText.textContent = `Step ${this.currentStep} of 5`;
+      }
+    }
+  }
+
+  customElements.define('quote-generator-{{ ai_gen_id }}', QuoteGenerator{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Quote generator",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#121212"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quote generator"
+    }
+  ]
+}
+{% endschema %}
