@@ -919,6 +919,7 @@
       <div class="ai-quote-onboarding-{{ ai_gen_id }}">
         <input type="email" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Email" required>
         <input type="tel" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Phone Number" required>
+        <input type="text" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Full Name" required>
         <input type="text" class="ai-quote-input-{{ ai_gen_id }}" placeholder="Company Name" required>
         
         <select class="ai-quote-select-{{ ai_gen_id }}" required>
@@ -937,7 +938,7 @@
         </div>
 
         <button class="ai-quote-nav-btn-{{ ai_gen_id }}" data-action="pay" style="margin-top: 24px;">
-          Pay $150 & Lock Quote
+          Lock in This Quote
         </button>
       </div>
     </div>
@@ -1041,11 +1042,11 @@ constructor() {
 
       const ctaBtn = this.querySelector('.ai-quote-cta-btn-{{ ai_gen_id }}');
       if (ctaBtn) {
-        ctaBtn.addEventListener('click', () => this.lockQuote());
+        ctaBtn.addEventListener('click', () => this.startOnboarding());
       }
 
       this.querySelectorAll('[data-action="pay"]').forEach(btn => {
-        btn.addEventListener('click', (e) => this.processPayment(e));
+        btn.addEventListener('click', (e) => this.lockQuote(e));
 
       });
 
@@ -1224,43 +1225,62 @@ constructor() {
       }
     }
 
- lockQuote() {
-    const onboardingStep = this.querySelector('[data-step="onboarding"]');
-    const email =
-  onboardingStep?.querySelector('input[type="email"]')?.value || '';
-  const company =
-  onboardingStep?.querySelector('input[placeholder="Company Name"]')?.value || '';
-  const payload = {
-    email: email,
-    company: company,
-    orderType: this.quoteData.orderType,
-    weightUnit: this.quoteData.weightUnit,
-    weight: this.quoteData.weight,
-    units: this.quoteData.units,
-    packaging: this.quoteData.packaging,
-    shipping_us_average: this.quoteData.shippingCost,
-    pick_pack_labor: this.quoteData.laborCost,
-    discount_percent: this.quoteData.discount,
-    discount_amount: this.calculateLabor() * (this.quoteData.discount / 100),
-    total_per_order: this.quoteData.totalPerOrder,
-    storage_fee: 25,
-    volume_band: this.quoteData.volume,
-    status: 'quote_locked'
-  };
+    startOnboarding() {
+      this.goToStep('onboarding');
+      this.hideStickyCTA();
+    }
 
-  fetch(this.webhookUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+    getOnboardingData() {
+      const onboardingStep = this.querySelector('[data-step="onboarding"]');
 
-  // Move forward AFTER logging
-  this.goToStep('onboarding');
-  this.hideStickyCTA();
-}
+      return {
+        email: onboardingStep?.querySelector('input[type="email"]')?.value?.trim() || '',
+        phone_number: onboardingStep?.querySelector('input[type="tel"]')?.value?.trim() || '',
+        full_name: onboardingStep?.querySelector('input[placeholder="Full Name"]')?.value?.trim() || '',
+        company: onboardingStep?.querySelector('input[placeholder="Company Name"]')?.value?.trim() || '',
+        platform_selected: onboardingStep?.querySelector('select')?.value || ''
+      };
+    }
+
+    lockQuote(event) {
+      if (event) event.preventDefault();
+
+      const onboardingData = this.getOnboardingData();
+      if (!onboardingData.full_name || !onboardingData.phone_number) {
+        alert('Please enter your name and phone number to lock the quote.');
+        return;
+      }
+
+      const payload = {
+        ...onboardingData,
+        name: onboardingData.full_name,
+        phone: onboardingData.phone_number,
+        orderType: this.quoteData.orderType,
+        weightUnit: this.quoteData.weightUnit,
+        weight: this.quoteData.weight,
+        units: this.quoteData.units,
+        packaging: this.quoteData.packaging,
+        shipping_us_average: this.quoteData.shippingCost,
+        pick_pack_labor: this.quoteData.laborCost,
+        discount_percent: this.quoteData.discount,
+        discount_amount: this.calculateLabor() * (this.quoteData.discount / 100),
+        total_per_order: this.quoteData.totalPerOrder,
+        storage_fee: 25,
+        volume_band: this.quoteData.volume,
+        status: 'lock_quote_clicked'
+      };
+
+      fetch(this.webhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      this.processPayment();
+    }
 
 
     hideStickyCTA() {
@@ -1270,44 +1290,8 @@ constructor() {
       }
     }
 
-processPayment(event) {
-  if (event) event.preventDefault();
-
-  // ✅ 1) Read onboarding inputs (this is where identity exists)
-  const onboardingStep = this.querySelector('[data-step="onboarding"]');
-
-  const email =
-    onboardingStep.querySelector('input[type="email"]')?.value || '';
-
-  const phone_number =
-    onboardingStep.querySelector('input[type="tel"]')?.value || '';
-
-  const company =
-    onboardingStep.querySelector('input[placeholder="Company Name"]')?.value || '';
-
-  const platform_selected =
-    onboardingStep.querySelector('select')?.value || '';
-
-  // ✅ 2) Send identity data to Google Sheets
-  fetch(this.webhookUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email,
-      phone_number,
-      company,
-      platform_selected,
-
-      status: 'onboarding_started',
-      source: 'quote_tool',
-
-      onboarding_paid: false,
-      onboarding_fee: 150
-    })
-  });
-
-  // ✅ 3) KEEP YOUR EXISTING SHOPIFY CHECKOUT LOGIC (unchanged)
+processPayment() {
+  // ✅ KEEP YOUR EXISTING SHOPIFY CHECKOUT LOGIC (unchanged)
   const form = document.createElement('form');
   form.method = 'POST';
   form.action = '/cart/add';
